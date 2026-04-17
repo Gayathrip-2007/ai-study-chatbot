@@ -1,1 +1,0 @@
-# StudyMind AI
