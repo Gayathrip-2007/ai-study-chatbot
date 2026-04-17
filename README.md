@@ -1,1 +1,1 @@
-# ai-study-chatbot
+# StudyMind AI
