@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Tutor | Premium Chatbot</title>
+    <meta name="description" content="An aesthetic, premium AI study chatbot to help you ace your exams.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i data-lucide="brain-circuit"></i>
+                    <h2>StudyMind AI</h2>
+                </div>
+                <button id="closeSidebarBtn" class="mobile-only icon-btn"><i data-lucide="x"></i></button>
+            </div>
+            
+            <button class="new-chat-btn" id="newChatBtn">
+                <i data-lucide="plus"></i>
+                <span>New Chat</span>
+            </button>
+
+            <div class="history-list" id="historyList">
+                <p class="section-title">Recent Chats</p>
+                <!-- Dynamic chats placeholder -->
+                <div class="history-item active">
+                    <i data-lucide="message-square"></i>
+                    <span>Current Session</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="usage-stats">
+                    <div class="usage-header">
+                        <span>Free Messages</span>
+                        <span id="usageCount">0 / 50</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="usageFill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <button class="upgrade-btn" id="openPricingBtn">
+                    <i data-lucide="zap"></i>
+                    <span>Upgrade to Pro</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <header class="chat-header">
+                <button id="openSidebarBtn" class="mobile-only icon-btn"><i data-lucide="menu"></i></button>
+                <div class="current-chat-title">
+                    <h3 id="currentChatTitle">New Study Session</h3>
+                    <span class="status-badge">Knowledge Base Ready</span>
+                </div>
+                <div class="header-actions">
+                </div>
+            </header>
+
+            <div class="messages-container" id="messagesContainer">
+                <!-- Welcome Message -->
+                <div class="message ai-message">
+                    <div class="avatar ai-avatar"><i data-lucide="bot"></i></div>
+                    <div class="message-content">
+                        <p>Hello! I'm your Study Tutor. I'm connected to the world's largest open knowledge base. Ask me any factual study questions!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div id="fileAttachmentPreview" style="display: none; align-items: center; gap: 8px; padding: 8px 16px; background: var(--bg-panel-hover); border-radius: 8px; margin-bottom: 8px; width: max-content; font-size: 0.85rem; border: 1px solid var(--primary);">
+                    <i data-lucide="file-text" style="width: 14px; height: 14px; color: var(--primary);"></i>
+                    <span id="attachedFileName">document.txt</span>
+                    <button type="button" id="removeAttachmentBtn" style="background: none; border: none; color: var(--text-secondary); margin-left: 8px; cursor: pointer; display: flex;"><i data-lucide="x" style="width: 14px; height: 14px;"></i></button>
+                </div>
+                <form id="chatForm" class="input-form glass-panel">
+                    <input type="file" id="fileInput" accept=".txt,.csv,.md,.json,.js,.html,.css" style="display: none;">
+                    <button type="button" class="attachment-btn" id="attachmentBtn"><i data-lucide="paperclip"></i></button>
+                    <textarea id="messageInput" placeholder="Ask a question (e.g. 'powerhouse of the cell')..." rows="1"></textarea>
+                    <button type="submit" class="send-btn" id="sendBtn" disabled><i data-lucide="send"></i></button>
+                </form>
+                <div class="disclaimer">Data sourced from public encyclopedias. Verify important information.</div>
+            </div>
+        </main>
+
+        <!-- Pricing Modal -->
+        <div class="modal-overlay" id="pricingModal">
+            <div class="pricing-modal glass-panel">
+                <button class="close-modal icon-btn" id="closePricingBtn"><i data-lucide="x"></i></button>
+                
+                <div id="pricingView">
+                    <div class="pricing-header">
+                        <h2>Unlock Your Full Potential</h2>
+                        <p>Choose the plan that fits your study needs.</p>
+                    </div>
+                    
+                    <div class="pricing-cards">
+                        <!-- Free Tier -->
+                        <div class="pricing-card basic">
+                            <div class="card-header">
+                                <h3>Basic</h3>
+                                <div class="price">Free</div>
+                                <p class="subtitle">For occasional help</p>
+                            </div>
+                            <ul class="features">
+                                <li><i data-lucide="check"></i> 50 queries per day</li>
+                                <li><i data-lucide="check"></i> Standard response speed</li>
+                                <li><i data-lucide="check"></i> Basic subject knowledge</li>
+                                <li class="disabled"><i data-lucide="x"></i> No file uploads</li>
+                            </ul>
+                            <button class="plan-btn secondary-btn" disabled>Current Plan</button>
+                        </div>
+
+                        <!-- Pro Tier -->
+                        <div class="pricing-card pro glow-effect">
+                            <div class="popular-badge">Most Popular</div>
+                            <div class="card-header">
+                                <h3>Pro Study</h3>
+                                <div class="price">₹99<span class="period">/mo</span></div>
+                                <p class="subtitle">For serious students</p>
+                            </div>
+                            <ul class="features">
+                                <li><i data-lucide="check"></i> <strong>Unlimited</strong> answers</li>
+                                <li><i data-lucide="check"></i> Priority response speed</li>
+                                <li><i data-lucide="check"></i> Advanced subject depth</li>
+                                <li><i data-lucide="check"></i> Document uploads & analysis</li>
+                            </ul>
+                            <button class="plan-btn primary-btn" id="showCheckoutBtn">Subscribe Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fake Checkout View -->
+                <div id="checkoutView" style="display: none;">
+                    <div class="pricing-header">
+                        <h2>Complete Payment</h2>
+                        <p>You are subscribing to Pro Study (₹99/mo)</p>
+                    </div>
+                    <form id="checkoutForm" class="checkout-form">
+                        <div style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 24px; text-align: center;">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi%3A%2F%2Fpay%3Fpa%3Dgayathripraveen227%40okhdfcbank%26pn%3DGayathri%2520Praveen%26am%3D99%26cu%3DINR" alt="UPI QR Code" style="width: 150px; height: 150px;">
+                            <p style="color: black; margin-top: 8px; font-weight: 600;">Scan to Pay ₹99</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Or enter your UPI ID</label>
+                            <input type="text" required placeholder="username@upi">
+                        </div>
+                        <button type="submit" class="plan-btn primary-btn" id="submitPaymentBtn" style="margin-top: 8px;">Verify & Pay</button>
+                        <button type="button" class="plan-btn secondary-btn" id="cancelCheckoutBtn" style="margin-top: 8px;">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
